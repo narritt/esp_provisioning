@@ -35,7 +35,7 @@ class BleService {
     log.i('Ble sevice start');
     if (_isPowerOn) {
       var state = await _waitForBluetoothPoweredOn();
-      log.i('Device power was on $state');
+      // log.i('Device power was on $state');
       return state;
     }
     var isPermissionOk = await requestBlePermissions();
@@ -43,7 +43,7 @@ class BleService {
       throw Future.error(Exception('Location permission not granted'));
     }
 
-    log.v('createClient');
+    // log.v('createClient');
     await _bleManager.createClient(
         restoreStateIdentifier: "example-ble-client-id",
         restoreStateAction: (peripherals) {
@@ -54,7 +54,7 @@ class BleService {
         });
 
     // if (Platform.isAndroid) {
-    log.v('enableRadio');
+    // log.v('enableRadio');
       // await _bleManager.enableRadio();
     // }
 
@@ -80,7 +80,7 @@ class BleService {
       await selectedPeripheral?.disconnectOrCancelConnection();
     }
     selectedPeripheral = peripheral;
-    log.v('selectedPeripheral = $selectedPeripheral');
+    log.v('selectedPeripheral = ${selectedPeripheral.name}');
   }
 
   Future<bool> stop() async {
@@ -119,7 +119,7 @@ class BleService {
       await _waitForBluetoothPoweredOn();
     }
     Peripheral p = peripheral ?? selectedPeripheral;
-    log.v('peripheral $p');
+    // log.v('peripheral $p');
     await _bleManager.stopPeripheralScan();
     EspProv prov = EspProv(
         transport: TransportBLE(p), security: Security1(pop: pop));
@@ -158,7 +158,9 @@ class BleService {
       }
     }
     var isLocationGranted = await Permission.locationWhenInUse.request();
-    log.v('checkBlePermissions, isLocationGranted=$isLocationGranted');
+    if(isLocationGranted != PermissionStatus.granted) {
+      log.v('checkBlePermissions, isLocationGranted=$isLocationGranted');
+    }
     return isLocationGranted == PermissionStatus.granted;
   }
 }

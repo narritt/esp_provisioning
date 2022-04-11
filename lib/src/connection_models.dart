@@ -20,6 +20,11 @@ class ConnectionStatus {
   final WifiConnectionState state;
   final String ip;
   final WifiConnectFailedReason failedReason;
+
+  @override
+  String toString() {
+    return "ConnectionStatus{state:$state, ip:$ip, failedReason:$failedReason}";
+  }
 }
 
 class WifiAP {
